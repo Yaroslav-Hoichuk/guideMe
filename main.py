@@ -3,14 +3,14 @@ import numpy as np
 import cv2
 from ultralytics import YOLO
 
-# Ініціалізація камери
+
 pipeline = rs.pipeline()
 config = rs.config()
 config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
 config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
 pipeline.start(config)
 
-# Завантаження YOLOv8
+
 model = YOLO('yolov8n.pt')
 
 try:
@@ -37,9 +37,8 @@ try:
             cv2.rectangle(color_image, (x1, y1), (x2, y2), (0, 255, 255), 2)
             cv2.putText(color_image, label, (x1, y2 + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 0), 2)
 
-            # Усереднене значення глибини всередині рамки
             roi = depth_image[y1:y2, x1:x2]
-            depth = np.mean(roi[roi > 0]) * 0.001  # в метрах
+            depth = np.mean(roi[roi > 0]) * 0.001  
 
             if depth:
                 distance_text = f"{depth:.2f} m"
